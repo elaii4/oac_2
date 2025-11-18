@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitectura Computacional | Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: #f8f9fa;
+        }
+
+        /* Header Hero */
+        .hero {
+            /* Se mantiene el degradado oscuro (overlay) y se añade la imagen directamente */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://profejaime.com/images/2024/01/05/tarjeta-de-expansion.jpg');
+            
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5em;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Subtítulo del Hero: Ya era blanco debido a .hero { color: white; }, pero se mantiene la clase. */
+        .hero-content p {
+            font-size: 1.3em;
+            font-weight: 300;
+            letter-spacing: 1px;
+            opacity: 0.95;
+            color: white; /* Aseguramos que el color sea blanco */
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 20px 25px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .nav-btn:hover {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .nav-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 40px;
+            min-height: calc(100vh - 600px);
+        }
+
+        /* Content */
+        .content {
+            display: none;
+            background: white;
+            padding: 60px 80px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.05);
+            animation: fadeIn 0.6s ease;
+            margin-bottom: 40px;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 2.5em;
+            font-weight: 300;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            font-weight: 400;
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+            font-size: 1.05em;
+            color: #555;
+        }
+
+        /* IMAGES STYLING ADDED HERE */
+        .content-img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 30px auto;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        /* END IMAGES STYLING */
+
+        /* Highlight Boxes */
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+
+        .case-study {
+            background: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+
+        .solution-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 20px 0 20px 40px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 0.95em;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Diagrams */
+        .diagram {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 2px;
+        }
+
+        .bus-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .bus-line {
+            padding: 20px;
+            border-radius: 2px;
+            font-weight: 500;
+            border-left: 5px solid;
+        }
+
+        .bus-datos {
+            background: #e3f2fd;
+            border-color: #2196F3;
+        }
+
+        .bus-direcciones {
+            background: #f3e5f5;
+            border-color: #9c27b0;
+        }
+
+        .bus-control {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 0;
+            font-size: 0.9em;
+            width: 100%;
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            margin: 5px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 0 20px;
+                margin: 40px auto;
+            }
+
+            .content {
+                padding: 40px 30px;
+            }
+
+            .nav-btn {
+                padding: 15px 12px;
+                font-size: 11px;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+        }
+
+        strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Arquitectura Computacional</h1>
+            <p>Buses del Sistema y Tarjetas de Expansión</p>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="showPage('intro')">Introducción</button>
+            <button class="nav-btn" onclick="showPage('objetivo')">Objetivo</button>
+            <button class="nav-btn" onclick="showPage('desarrollo')">Desarrollo</button>
+            <button class="nav-btn" onclick="showPage('caso')">Caso de Estudio</button>
+            <button class="nav-btn" onclick="showPage('conclusion')">Conclusiones</button>
+            <button class="nav-btn" onclick="showPage('referencias')">Referencias</button>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div id="intro" class="content active">
+            <h2>Introducción</h2>
+            
+            <p>En el mundo del desarrollo de software moderno, comprender la arquitectura del hardware subyacente no es simplemente una curiosidad técnica, sino una necesidad fundamental para crear aplicaciones eficientes, escalables y optimizadas. Los buses del sistema y las tarjetas de expansión constituyen la columna vertebral de la comunicación interna de cualquier computadora, actuando como las arterias por las cuales fluye la información entre todos los componentes del sistema.</p>
+
+            <div class="highlight-box">
+                <h3>¿Por qué es importante estudiar los buses del sistema?</h3>
+                <p>Los buses del sistema son canales de comunicación que permiten la transferencia de datos entre el procesador, la memoria y los dispositivos periféricos. Sin un conocimiento adecuado de cómo funcionan estos buses, un desarrollador puede enfrentarse a:</p>
+                <ul>
+                    <li><strong>Cuellos de botella de rendimiento:</strong> No identificar las limitaciones de ancho de banda</li>
+                    <li><strong>Incompatibilidades de hardware:</strong> Desarrollar software que no aprovecha las capacidades del sistema</li>
+                    <li><strong>Ineficiencias de memoria:</strong> Mal uso de los canales de comunicación disponibles</li>
+                    <li><strong>Errores de sincronización:</strong> Problemas con la temporización de las operaciones</li>
+                </ul>
+            </div>
+
+            <h3>Las Tarjetas de Expansión: Extendiendo las Capacidades del Sistema</h3>
+            <p>Las tarjetas de expansión permiten agregar funcionalidades especializadas a una computadora: desde tarjetas gráficas de alto rendimiento hasta controladoras de red avanzadas. Para un desarrollador de software, comprender cómo estas tarjetas se comunican con el sistema es crucial para:</p>
+            <ul>
+                <li>Optimizar el rendimiento de aplicaciones que requieren procesamiento gráfico intensivo</li>
+                <li>Desarrollar drivers y controladores eficientes</li>
+                <li>Resolver problemas de compatibilidad entre hardware y software</li>
+                <li>Aprovechar al máximo las capacidades de aceleración por hardware</li>
+            </ul>
+
+            <div class="highlight-box">
+                <h4>Relevancia para Desarrolladores de Software</h4>
+                <p>En la era de la inteligencia artificial, el procesamiento gráfico avanzado, la realidad virtual y el cómputo en la nube, los desarrolladores modernos deben:</p>
+                <ul>
+                    <li>Entender cómo el hardware afecta el rendimiento de sus aplicaciones</li>
+                    <li>Identificar y resolver cuellos de botella relacionados con el hardware</li>
+                    <li>Tomar decisiones informadas sobre requisitos de sistema para sus aplicaciones</li>
+                    <li>Optimizar el código para aprovechar características específicas del hardware</li>
+                    <li>Diagnosticar problemas que surgen de la interacción entre software y hardware</li>
+                </ul>
+            </div>
+
+            <p>Este blog explora en profundidad estos conceptos fundamentales, proporcionando el conocimiento necesario para que cualquier profesional del software pueda comprender y aprovechar la arquitectura de hardware moderna en sus proyectos.</p>
+        </div>
+
+        <div id="objetivo" class="content">
+            <h2>Objetivo del Trabajo</h2>
+            
+            <div class="highlight-box">
+                <h3>Objetivo General</h3>
+                <p>Analizar y comprender la arquitectura de los buses del sistema y las tarjetas de expansión, estableciendo claramente su relación con el desarrollo de software profesional y su impacto en el rendimiento, compatibilidad y optimización de aplicaciones modernas.</p>
+            </div>
+
+            <h3>Propósito del Trabajo</h3>
+            <p>Este trabajo tiene como propósito fundamental destacar la conexión inseparable entre el hardware y el software en el entorno de desarrollo moderno. A menudo, los desarrolladores trabajan en capas de abstracción tan altas que pierden de vista cómo sus decisiones de diseño y código interactúan con el hardware físico que ejecuta sus aplicaciones.</p>
+
+            <p>Comprender esta conexión es crucial porque:</p>
+            <ul>
+                <li>El hardware establece los límites de lo que el software puede lograr</li>
+                <li>Las decisiones de arquitectura de software deben considerar las capacidades del hardware</li>
+                <li>Los problemas de rendimiento frecuentemente tienen sus raíces en incompatibilidades o configuraciones incorrectas de hardware</li>
+                <li>La optimización efectiva requiere conocimiento de ambos dominios</li>
+            </ul>
+
+            <h3>Objetivos Específicos</h3>
+            
+            <p><strong>1. Comprender la arquitectura de buses del sistema</strong></p>
+            <p>Explorar en detalle los diferentes tipos de buses (datos, direcciones y control), sus funciones específicas, características técnicas y cómo trabajan conjuntamente para permitir la comunicación entre componentes del sistema.</p>
+
+            <p><strong>2. Analizar las tarjetas de expansión y su integración</strong></p>
+            <p>Estudiar los diversos tipos de tarjetas de expansión disponibles, comprender cómo se conectan al sistema a través de diferentes interfaces (PCIe, PCI, AGP), y analizar su relación con la memoria del sistema y los dispositivos periféricos.</p>
+
+            <p><strong>3. Establecer la conexión hardware-software</strong></p>
+            <p>Demostrar cómo el conocimiento profundo de buses y tarjetas de expansión impacta directamente en el rendimiento de aplicaciones desarrolladas profesionalmente, la compatibilidad entre diferentes configuraciones de hardware, la capacidad de optimización del código, y la resolución de problemas relacionados con el hardware.</p>
+
+            <div class="highlight-box">
+                <h3>La Importancia de la Conexión Hardware-Software en el Desarrollo</h3>
+                <p>En el desarrollo de software moderno, existe una tendencia a abstraerse completamente del hardware subyacente. Sin embargo, esta abstracción tiene límites prácticos. Cuando desarrollamos aplicaciones de alto rendimiento, sistemas de procesamiento de datos masivos, software de tiempo real, o aplicaciones multimedia, el conocimiento del hardware se convierte en un factor crítico para el éxito del proyecto.</p>
+                
+                <p>Los profesionales que dominan esta conexión pueden tomar decisiones más informadas, diagnosticar problemas más rápidamente, y crear soluciones más eficientes y robustas.</p>
+            </div>
+        </div>
+
+        <div id="desarrollo" class="content">
+            <h2>Desarrollo de Contenidos</h2>
+            
+            <h3>Parte 1: Buses del Sistema</h3>
+
+            <img class="content-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5JJ78lR8t-RowAHuOuL2F0YasOHMy8ZW5Bg&s" alt="Diagrama conceptual de los buses del sistema conectando CPU, Memoria y Dispositivos de Entrada/Salida.">
+            <h4>¿Qué son los Buses del Sistema?</h4>
+            <p>Los buses del sistema son canales de comunicación físicos que conectan los diferentes componentes de una computadora, permitiendo la transferencia de información entre el procesador (CPU), la memoria, y los dispositivos de entrada/salida. Funcionan como "autopistas de datos" por las cuales viaja la información en forma de señales eléctricas.</p>
+
+            <div class="bus-diagram">
+                <div class="bus-line bus-datos">
+                     BUS DE DATOS → Transporta la información (datos e instrucciones)
+                </div>
+                <div class="bus-line bus-direcciones">
+                     BUS DE DIRECCIONES → Indica dónde se almacena o de dónde se lee la información
+                </div>
+                <div class="bus-line bus-control">
+                     BUS DE CONTROL → Coordina y sincroniza todas las operaciones
+                </div>
+            </div>
+
+            <h4>1. Bus de Datos</h4>
+            <div class="highlight-box">
+                <p><strong>Función Principal:</strong> El bus de datos es el encargado de transportar la información real entre los componentes del sistema. Por este bus viajan tanto los datos que se están procesando como las instrucciones que debe ejecutar el procesador.</p>
+                
+                <p><strong>Características Técnicas:</strong></p>
+                <ul>
+                    <li><strong>Bidireccional:</strong> La información puede viajar en ambas direcciones</li>
+                    <li><strong>Ancho del bus:</strong> Determina cuántos bits se pueden transferir simultáneamente (32 bits, 64 bits, 128 bits, etc.)</li>
+                    <li><strong>Velocidad de transferencia:</strong> Medida en MB/s o GB/s</li>
+                </ul>
+
+                <p><strong>Impacto en el Software:</strong> Un bus de datos de mayor ancho permite transferir más información en cada ciclo, resultando en mayor velocidad de procesamiento para aplicaciones que manejan grandes volúmenes de datos, mejor rendimiento en operaciones con matrices y vectores, y procesamiento más eficiente de multimedia.</p>
+            </div>
+
+            <h4>2. Bus de Direcciones</h4>
+            <div class="highlight-box">
+                <p><strong>Función Principal:</strong> El bus de direcciones especifica la ubicación de memoria o el dispositivo con el cual el procesador desea comunicarse. Funciona como un "sistema de dirección postal" dentro de la computadora.</p>
+                
+                <p><strong>Características Técnicas:</strong></p>
+                <ul>
+                    <li><strong>Unidireccional:</strong> Solo el CPU envía direcciones</li>
+                    <li><strong>Ancho determina el espacio de direccionamiento:</strong> 32 bits = 4 GB; 64 bits = 16 Exabytes (teórico)</li>
+                </ul>
+
+                <p><strong>Impacto en el Software:</strong> El ancho del bus de direcciones limita directamente la cantidad máxima de RAM que puede usar una aplicación, el tamaño de archivos que se pueden cargar en memoria, y establece las limitaciones de los punteros en programación (32 bits vs 64 bits).</p>
+            </div>
+
+            <h4>3. Bus de Control</h4>
+            <div class="highlight-box">
+                <p><strong>Función Principal:</strong> El bus de control transporta señales que coordinan y sincronizan todas las operaciones del sistema. Es el "director de orquesta" que asegura que todos los componentes trabajen en armonía.</p>
+                
+                <p><strong>Señales Principales:</strong> Read (lectura), Write (escritura), Clock (reloj), Interrupt (interrupción), Reset, Bus Request/Grant.</p>
+
+                <p><strong>Impacto en el Software:</strong> Las señales de control afectan la velocidad de respuesta del sistema (latencia), el manejo de interrupciones (eventos asíncronos), la sincronización en aplicaciones de tiempo real, y el acceso directo a memoria (DMA) para transferencias rápidas.</p>
+            </div>
+
+            <h4>Tabla Comparativa de Buses del Sistema</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Bus</th>
+                        <th>Dirección</th>
+                        <th>Función</th>
+                        <th>Impacto en Rendimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bus de Datos</strong></td>
+                        <td>Bidireccional</td>
+                        <td>Transportar información</td>
+                        <td>Mayor ancho = más datos por ciclo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bus de Direcciones</strong></td>
+                        <td>Unidireccional</td>
+                        <td>Especificar ubicaciones</td>
+                        <td>Determina memoria máxima disponible</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bus de Control</strong></td>
+                        <td>Bidireccional</td>
+                        <td>Coordinar operaciones</td>
+                        <td>Afecta latencia y sincronización</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Parte 2: Tarjetas de Expansión</h3>
+
+            <img class="content-img" src="https://upload.wikimedia.org/wikipedia/commons/f/fb/Fitting-expansion-card.JPG" alt="Imagen de una ranura PCI Express (PCIe) en una placa base.">
+            <h4>¿Qué son las Tarjetas de Expansión?</h4>
+            <p>Las tarjetas de expansión son componentes de hardware que se conectan a la placa base (motherboard) para agregar funcionalidades adicionales o mejorar las capacidades existentes del sistema. Se insertan en ranuras (slots) específicas y se comunican con el resto del sistema a través de buses dedicados.</p>
+
+            <h4>Tipos de Interfaces de Expansión</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Interface</th>
+                        <th>Ancho de Banda</th>
+                        <th>Uso Principal</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>PCI</strong></td>
+                        <td>133 MB/s</td>
+                        <td>Uso general</td>
+                        <td>Obsoleto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AGP</strong></td>
+                        <td>266-2133 MB/s</td>
+                        <td>Tarjetas gráficas</td>
+                        <td>Obsoleto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCIe 3.0 x16</strong></td>
+                        <td>~16 GB/s</td>
+                        <td>GPUs modernas</td>
+                        <td>Común</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCIe 4.0 x16</strong></td>
+                        <td>~32 GB/s</td>
+                        <td>GPUs alto rendimiento</td>
+                        <td>Actual</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCIe 5.0 x16</strong></td>
+                        <td>~64 GB/s</td>
+                        <td>Última generación</td>
+                        <td>Emergente</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>PCIe (PCI Express): El Estándar Moderno</h4>
+            <div class="highlight-box">
+                <p><strong>Características Principales:</strong></p>
+                <ul>
+                    <li><strong>Arquitectura punto a punto:</strong> Cada dispositivo tiene un enlace dedicado</li>
+                    <li><strong>Líneas (Lanes):</strong> Configuraciones x1, x4, x8, x16 (más líneas = mayor ancho de banda)</li>
+                    <li><strong>Generaciones:</strong> PCIe 3.0 (985 MB/s por línea), PCIe 4.0 (1969 MB/s por línea), PCIe 5.0 (3938 MB/s por línea)</li>
+                    <li><strong>Retrocompatibilidad:</strong> Una tarjeta PCIe 4.0 funciona en slot 3.0, pero a velocidad 3.0</li>
+                </ul>
+            </div>
+
+            <h4>Tipos Principales de Tarjetas de Expansión</h4>
+
+            <p><strong>1. Tarjetas Gráficas (GPU)</strong></p>
+            <div class="highlight-box">
+                <p><strong>Función:</strong> Procesamiento gráfico, renderizado 3D, cálculos paralelos (GPGPU)</p>
+                <p><strong>Aplicaciones:</strong> Videojuegos, renderizado profesional (CAD, animación), Machine Learning y Deep Learning, aceleración de cómputo científico</p>
+                <p><strong>Impacto en software:</strong> Las aplicaciones deben usar APIs específicas (DirectX, OpenGL, Vulkan, CUDA, OpenCL) para aprovechar la aceleración por hardware. El software debe minimizar transferencias CPU-GPU y mantener datos en VRAM cuando sea posible.</p>
+            </div>
+
+            <p><strong>2. Tarjetas de Red (NIC)</strong></p>
+            <div class="highlight-box">
+                <p><strong>Función:</strong> Comunicación en red de alta velocidad</p>
+                <p><strong>Aplicaciones:</strong> Servidores de alto tráfico, estaciones de trabajo, clustering</p>
+                <p><strong>Impacto en software:</strong> Aplicaciones de red intensivas (streaming, servidores web, bases de datos) se benefician de NICs con soporte de offloading (procesamiento de tareas de red en la tarjeta).</p>
+            </div>
+
+            <p><strong>3. Tarjetas Controladoras (RAID, SATA, NVMe)</strong></p>
+            <div class="highlight-box">
+                <p><strong>Función:</strong> Control de dispositivos de almacenamiento</p>
+                <p><strong>Aplicaciones:</strong> Configuraciones RAID para redundancia y rendimiento, servidores con múltiples discos</p>
+                <p><strong>Impacto en software:</strong> Las bases de datos y aplicaciones que requieren I/O intensivo se benefician enormemente de controladoras RAID con caché.</p>
+            </div>
+
+            <h4>Relación con Sistemas de Memoria y Dispositivos Periféricos</h4>
+            <div class="diagram">
+                <p><strong>Acceso a Memoria por Tarjetas de Expansión:</strong></p>
+                
+                <p><strong>DMA (Direct Memory Access):</strong> Permite a la tarjeta acceder directamente a la RAM sin pasar por el CPU. Esto reduce la carga del procesador y mejora el rendimiento en transferencias grandes. Es crítico para tarjetas de red, discos y GPUs.</p>
+                
+                <p><strong>Memory-Mapped I/O (MMIO):</strong> La tarjeta expone sus registros como direcciones de memoria. El software puede leer/escribir a la tarjeta como si fuera memoria, simplificando la programación de drivers.</p>
+                
+                <p><strong>Memoria Compartida:</strong> Algunas GPUs integradas comparten memoria con el sistema. GPUs dedicadas tienen su propia VRAM pero pueden acceder a RAM del sistema cuando es necesario.</p>
+            </div>
+
+            <h3>Impacto en el Rendimiento y Compatibilidad del Software Aplicativo</h3>
+
+            <div class="highlight-box">
+                <h4>Cómo el Conocimiento de Hardware Impacta el Software Profesional</h4>
+                
+                <p><strong>1. Rendimiento:</strong> Comprender el ancho de banda de buses y tarjetas permite a los desarrolladores optimizar el flujo de datos, evitar cuellos de botella, y diseñar algoritmos que aprovechen las capacidades del hardware.</p>
+
+                <p><strong>2. Compatibilidad:</strong> Conocer las diferentes generaciones de PCIe, tipos de memoria, y capacidades de hardware permite especificar requisitos correctos y diseñar software que se adapte a diferentes configuraciones.</p>
+
+                <p><strong>3. Diagnóstico:</strong> Cuando una aplicación no rinde como se espera, entender el hardware permite identificar rápidamente si el problema es de software, hardware, o configuración incorrecta.</p>
+
+                <p><strong>4. Optimización:</strong> Los desarrolladores pueden tomar decisiones informadas sobre estructuras de datos, algoritmos de procesamiento, y estrategias de caché cuando comprenden las limitaciones y capacidades del hardware.</p>
+            </div>
+
+            <h4>Ejemplo Práctico: Aplicación de Renderizado 3D</h4>
+            <div class="case-study">
+                <p>Consideremos una aplicación profesional de modelado 3D:</p>
+                <ul>
+                    <li><strong>Bus de datos ancho (64-bit):</strong> Permite transferir texturas y geometría rápidamente</li>
+                    <li><strong>Bus de direcciones de 64 bits:</strong> Permite cargar escenas con gigabytes de datos en memoria</li>
+                    <li><strong>GPU con PCIe x16:</strong> Maximiza la transferencia de datos entre CPU y GPU</li>
+                    <li><strong>DMA:</strong> Permite que la GPU acceda directamente a texturas en RAM sin sobrecargar el CPU</li>
+                </ul>
+                <p>Si cualquiera de estos componentes está mal configurado o limitado, el rendimiento de la aplicación se verá seriamente comprometido, sin importar cuán optimizado esté el código.</p>
+            </div>
+        </div>
+
+        <div id="caso" class="content">
+            <h2>Caso de Estudio</h2>
+            <h3>Compatibilidad de Hardware y Software en un Entorno de Desarrollo</h3>
+            
+            <div class="case-study">
+                <h4>Descripción del Escenario</h4>
+                <p><strong>Contexto:</strong> Una empresa de desarrollo de software 3D decide invertir en una nueva tarjeta gráfica dedicada de última generación para acelerar el renderizado de su aplicación de modelado y animación 3D. Se adquiere una GPU de alto rendimiento (por ejemplo, NVIDIA RTX 4090 o AMD RX 7900 XTX) con una inversión considerable de más de $1,500 USD.</p>
+                
+                <p><strong>Expectativa:</strong> Mejora significativa en los tiempos de renderizado, mayor fluidez en la visualización 3D, y capacidad de trabajar con escenas más complejas.</p>
+                
+                <p><strong>Problema Detectado:</strong> Después de la instalación, el software de renderizado no muestra ninguna mejora significativa de rendimiento. Los tiempos de renderizado son prácticamente idénticos a los obtenidos con la GPU anterior de gama media.</p>
+            </div>
+
+            <h3>Análisis del Problema: Relación entre Tarjeta de Expansión, Bus del Sistema y Software</h3>
+            
+            <div class="highlight-box">
+                <h4>Síntomas Observados</h4>
+                <ul>
+                    <li>El software detecta correctamente la tarjeta gráfica en sus configuraciones</li>
+                    <li>La aceleración por hardware está habilitada</li>
+                    <li>El uso de GPU reportado por el sistema oscila entre 15-30% durante operaciones de renderizado intensivo</li>
+                    <li>Los tiempos de renderizado son similares al modo solo-CPU</li>
+                    <li>Aparecen advertencias en los logs del driver sobre "ancho de banda limitado"</li>
+                </ul>
+            </div>
+
+            <h4>Investigación Técnica</h4>
+            <p>Al utilizar herramientas de diagnóstico como GPU-Z y HWiNFO, se descubre el problema real:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Especificación</th>
+                        <th>Valor Esperado</th>
+                        <th>Valor Real</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Interfaz GPU</td>
+                        <td>PCIe 4.0 x16</td>
+                        <td>PCIe 3.0 x4</td>
+                        <td>❌ Problema crítico</td>
+                    </tr>
+                    <tr>
+                        <td>Ancho de banda teórico</td>
+                        <td>~32 GB/s</td>
+                        <td>~4 GB/s</td>
+                        <td>❌ Reducción del 87.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Memoria GPU (VRAM)</td>
+                        <td>24 GB GDDR6X</td>
+                        <td>24 GB GDDR6X</td>
+                        <td> Correcto</td>
+                    </tr>
+                    <tr>
+                        <td>Memoria Sistema (RAM)</td>
+                        <td>32 GB DDR4</td>
+                        <td>32 GB DDR4</td>
+                        <td> Correcto</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Conclusión del Caso de Estudio:</strong> La placa base antigua no soportaba la velocidad completa de la tarjeta gráfica moderna. El bus PCIe 3.0 x4 limitó drásticamente el ancho de banda, creando un cuello de botella que impedía a la potente GPU recibir datos lo suficientemente rápido para funcionar a su máxima capacidad. **El problema no era la GPU ni el software, sino una limitación en el Bus de Expansión (PCIe).**</p>
+
+            <div class="solution-box">
+                <h4>Solución Aplicada</h4>
+                <p>La solución fue reubicar la tarjeta gráfica en la ranura PCIe principal x16 (que operaba en modo 4.0 x16 o al menos 3.0 x16 completo) o, de ser necesario, actualizar la placa base y el procesador para obtener soporte completo de PCIe 4.0 x16. Una vez que la tarjeta funcionó a su ancho de banda completo, los tiempos de renderizado se redujeron en más de un 60%, cumpliendo con la expectativa inicial.</p>
+            </div>
+        </div>
+
+        <div id="conclusion" class="content">
+            <h2>Conclusiones</h2>
+            
+            <p>La arquitectura computacional, con sus buses del sistema y tarjetas de expansión, es un factor determinante en el rendimiento de cualquier aplicación de software. Para el desarrollador moderno, el conocimiento de este hardware no es opcional, sino fundamental para:</p>
+
+            <ul>
+                <li><strong>Optimizar la Transferencia de Datos:</strong> Al comprender el ancho de banda del bus de datos, se pueden diseñar algoritmos que minimicen la contención de bus.</li>
+                <li><strong>Maximizar el Uso de Memoria:</strong> El bus de direcciones define las capacidades de direccionamiento de la RAM, influenciando directamente en la arquitectura de aplicaciones de datos masivos.</li>
+                <li><strong>Aprovechar la Aceleración por Hardware:</strong> El conocimiento de interfaces como PCIe permite seleccionar el hardware adecuado y garantizar que las tarjetas de expansión (especialmente GPUs) funcionen sin cuellos de botella.</li>
+                <li><strong>Diagnóstico y Solución de Problemas:</strong> La capacidad de diagnosticar un cuello de botella de rendimiento como el del Caso de Estudio, donde el problema era la configuración del bus PCIe y no el código, es lo que diferencia a un profesional avanzado.</li>
+            </ul>
+
+            <div class="highlight-box">
+                <p><strong>Recomendación Final:</strong> Los desarrolladores de software deben incorporar activamente la arquitectura de hardware en sus consideraciones de diseño. Esto incluye monitorear métricas de bus y E/S (I/O) en lugar de centrarse únicamente en la carga de la CPU. La eficiencia se encuentra en la intersección de un código bien escrito y un hardware bien aprovechado.</p>
+            </div>
+        </div>
+
+        <div id="referencias" class="content">
+            <h2>Referencias</h2>
+            
+            <ul>
+                <li>Stallings, William (2021). <strong>Organización y Arquitectura de Computadores.</strong> Pearson Educación.</li>
+                <li>Tanenbaum, Andrew S. (2014). <strong>Organización de Computadoras.</strong> Pearson Educación.</li>
+                <li>Wikipedia. **Bus (informática)**.</li>
+                <li>PCI-SIG. <strong>PCI Express Specifications.</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Blog de Arquitectura Computacional.</p>
+        <p>Diseñado para el estudio de los fundamentos de hardware y su impacto en el software.</p>
+    </footer>
+
+    <script>
+        function showPage(pageId) {
+            // Oculta todos los contenidos
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Muestra el contenido solicitado
+            const activeContent = document.getElementById(pageId);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
+
+            // Actualiza el estado activo del botón
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(pageId)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Asegurarse de que el script cargue la página de introducción al inicio.
+        document.addEventListener('DOMContentLoaded', () => {
+             // Ya se maneja con la clase 'active' en el HTML para 'intro'
+        });
+    </script>
+</body>
+</html>
